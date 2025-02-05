@@ -115,7 +115,7 @@ const MovieModal = ({ isOpen, setIsOpen, id, genres }: Props) => {
                   <span>•</span>
                   <p>{convertMinutesToHoursAndMinutes(runtime!)}</p>
                 </div>
-                <a href={homepage ? homepage : "/"}>
+                <a href={homepage ? homepage : ""} target="_blank">
                   <button className="btn">
                     Visit Homepage <GoArrowUpRight />
                   </button>
