@@ -1,19 +1,20 @@
 import { Client, Databases, ID, Query } from "appwrite";
+import { config } from "./lib/config.ts";
 
-const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
-const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
-const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
+const {
+  appwrite: { projectId, databaseId, collectionId },
+} = config;
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
-  .setProject(PROJECT_ID);
+  .setProject(projectId);
 
 const database = new Databases(client);
 
 export const updateSearchCount = async (searchTerm: string, movie: Movie) => {
   // 1. Use Appwrite SDK to check if the search term exists in the database
   try {
-    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+    const result = await database.listDocuments(databaseId, collectionId, [
       Query.equal("searchTerm", searchTerm),
     ]);
 
@@ -21,13 +22,13 @@ export const updateSearchCount = async (searchTerm: string, movie: Movie) => {
     if (result.documents.length > 0) {
       const document = result.documents[0];
 
-      await database.updateDocument(DATABASE_ID, COLLECTION_ID, document.$id, {
+      await database.updateDocument(databaseId, collectionId, document.$id, {
         count: document.count + 1,
       });
 
       // 3. If it doesn't, create a new document with the search term and count as 1
     } else {
-      await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
+      await database.createDocument(databaseId, collectionId, ID.unique(), {
         searchTerm,
         count: 1,
         movie_id: movie.id,
@@ -41,7 +42,7 @@ export const updateSearchCount = async (searchTerm: string, movie: Movie) => {
 
 export const getTrendingMovies = async () => {
   try {
-    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+    const result = await database.listDocuments(databaseId, collectionId, [
       Query.limit(5),
       Query.orderDesc("count"),
     ]);

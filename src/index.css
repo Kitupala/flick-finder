@@ -118,7 +118,7 @@
   }
 
   .movie-card {
-    @apply bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10;
+    @apply bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10 hover:transform hover:scale-102 transition duration-300 cursor-pointer;
 
     & img {
       @apply rounded-lg h-auto w-full;
@@ -154,6 +154,34 @@
 
     & .content .year {
       @apply text-gray-100 font-medium text-base;
+    }
+  }
+
+  .modal {
+    @apply w-full mx-6 space-y-4 bg-[#030014] p-12 drop-shadow-[0_0_35px_rgba(171,139,255,0.3)] rounded-lg;
+
+    & .title {
+      @apply font-bold text-white flex flex-row justify-between items-center;
+    }
+
+    & .details {
+      @apply text-gray-100 font-light text-sm gap-2 mb-8;
+    }
+
+    & img {
+      @apply w-fit h-[300px] rounded-lg;
+    }
+
+    & .rating {
+      @apply flex flex-row gap-1 items-center text-sm font-medium w-fit bg-[rgba(34,31,61,1)] px-4 py-2 rounded-sm;
+    }
+
+    & .rating img {
+      @apply size-4 object-contain;
+    }
+
+    & a .btn {
+      @apply bg-linear-to-r text-dark-100 from-[#D6C7FF] to-[#AB8BFF] px-4 py-2 rounded-sm flex flex-row items-center gap-2 font-medium hover:translate-y-[-2px] transition-all duration-300;
     }
   }
 }
