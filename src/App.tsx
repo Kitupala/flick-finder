@@ -6,16 +6,7 @@ import Search from "./components/Search.tsx";
 import MovieCard from "./components/MovieCard.tsx";
 import { getTrendingMovies, updateSearchCount } from "./appwrite.ts";
 import { Models } from "appwrite";
-
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const API_OPTIONS = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-};
+import { config } from "./lib/config.ts";
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,7 +15,6 @@ const App = () => {
   const [trendingMovies, setTrendingMovies] = useState<
     Models.Document[] | undefined
   >([]);
-
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -39,8 +29,8 @@ const App = () => {
 
   const fetchGenres = async () => {
     try {
-      const endpoint = `${API_BASE_URL}/genre/movie/list?language=en`;
-      const response = await fetch(endpoint, API_OPTIONS);
+      const endpoint = `${config.apiBaseUrl}/genre/movie/list?language=en`;
+      const response = await fetch(endpoint, config.apiOptions);
 
       if (!response.ok) {
         throw new Error(`Error fetching genres: ${response.statusText}`);
@@ -65,9 +55,9 @@ const App = () => {
 
     try {
       const endpoint = query
-        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-        : `${API_BASE_URL}/discover/movie?&sort_by=popularity.desc`;
-      const response = await fetch(endpoint, API_OPTIONS);
+        ? `${config.apiBaseUrl}/search/movie?query=${encodeURIComponent(query)}`
+        : `${config.apiBaseUrl}/discover/movie?&sort_by=popularity.desc`;
+      const response = await fetch(endpoint, config.apiOptions);
 
       if (!response.ok) {
         throw new Error(`Error fetching movies: ${response.statusText}`);
@@ -102,6 +92,11 @@ const App = () => {
       console.error(`Error fetching trending movies: ${err}`);
     }
   };
+
+  const getMovieGenres = (genreIds: number[]) =>
+    genreIds.map(
+      (id) => genres.find((genre) => genre.id === id)?.name || "N/A",
+    );
 
   useEffect(() => {
     fetchMovies(debouncedSearchTerm);
@@ -151,7 +146,11 @@ const App = () => {
           ) : (
             <ul>
               {movieList.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} genres={genres} />
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  genres={getMovieGenres(movie.genre_ids)}
+                />
               ))}
             </ul>
           )}

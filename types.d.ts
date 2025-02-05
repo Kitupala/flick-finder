@@ -13,6 +13,20 @@ interface Movie {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  runtime?: number;
+  homepage?: string;
+  production_countries?: {
+    iso_3166_1: string;
+    name: string;
+  }[];
+  budget?: number;
+  revenue?: number;
+  production_companies?: {
+    id: number;
+    logo_path: string;
+    name: string;
+    origin_country: string;
+  }[];
 }
 
 interface Genre {
