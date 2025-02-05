@@ -181,7 +181,7 @@
     }
 
     & a .btn {
-      @apply bg-linear-to-r text-dark-100 from-[#D6C7FF] to-[#AB8BFF] px-4 py-2 rounded-sm flex flex-row items-center gap-2 font-medium hover:translate-y-[-2px] transition-all duration-300;
+      @apply bg-linear-to-r from-[#D6C7FF] to-[#AB8BFF] text-dark-100 px-4 py-2 rounded-sm flex flex-row items-center gap-2 font-medium hover:translate-y-[-2px] transition-all duration-300;
     }
   }
 }
